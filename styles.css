@@ -1,0 +1,1363 @@
+/* styles.css — 통합 완전본 (아티스트 카드: 아이콘과 이름 가로 배치 보강)
+   - 기존 통합본을 그대로 유지하며 .artist-card 내부 레이아웃을 명확히 가로 정렬로 고정
+   - 기능 변경 없음, 중복 규칙 정리
+*/
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Theme variables */
+:root {
+    --sidebar-width: 220px;
+    --sidebar-left-offset: 20px;
+    --page-padding: 40px;
+
+    --bg: #000;
+    --text: #fff;
+    --muted: #bfbfbf;
+    --accent: #f5c542;
+    --accent-2: #ffd966;
+    --border-neutral: rgba(255, 255, 255, 0.08);
+    --border-accent: rgba(245, 197, 66, 0.98);
+    --border-width: 2px;
+    --vol-percent: 20%;
+}
+
+/* Base */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    left: var(--sidebar-left-offset);
+    top: var(--sidebar-left-offset);
+    width: var(--sidebar-width);
+    height: calc(100vh - (var(--sidebar-left-offset) * 2));
+    padding: 30px 20px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.6));
+    border: var(--border-width) solid var(--border-neutral);
+    z-index: 100;
+    overflow: auto;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 24px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    border: var(--border-width) solid transparent;
+    transition: all .18s;
+}
+
+.sidebar-link:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.sidebar-link.active {
+    color: var(--text);
+    background: linear-gradient(90deg, rgba(245, 197, 66, 0.06), rgba(255, 255, 255, 0.02));
+    border-left: calc(var(--border-width) + 1px) solid var(--border-accent);
+    padding-left: 13px;
+}
+
+/* Main content */
+.main-content {
+    margin-left: calc(var(--sidebar-width) + (var(--sidebar-left-offset) * 2));
+    padding: 0 var(--page-padding);
+    padding-top: 40px;
+    width: calc(100% - (var(--sidebar-width) + (var(--sidebar-left-offset) * 2)));
+    box-sizing: border-box;
+    margin-bottom: 120px;
+}
+
+.page {
+    display: none;
+    width: 100%;
+}
+
+.page.active {
+    display: block;
+}
+
+.section {
+    margin-bottom: 80px;
+}
+
+/* Cards / grids */
+.playlist-grid,
+.songs-grid,
+.artist-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.playlist-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.songs-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.artist-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.playlist-card,
+.song-card,
+.search-result-card {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    border: var(--border-width) solid var(--border-neutral);
+    transition: transform .18s, background .18s;
+    cursor: pointer;
+}
+
+.playlist-card:hover,
+.song-card:hover,
+.search-result-card:hover {
+    transform: translateY(-6px);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Image wrappers */
+.playlist-image,
+.song-image,
+.search-result-image {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: var(--border-width) solid var(--border-neutral);
+}
+
+.search-result-image img,
+.playlist-image img,
+.song-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Buttons */
+.play-btn,
+.play-btn-large {
+    background: var(--accent);
+    color: #000;
+    border: 2px solid var(--border-accent);
+    cursor: pointer;
+    transition: all .18s;
+}
+
+.play-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 18px;
+    opacity: 0;
+}
+
+.playlist-card:hover .play-btn,
+.song-card:hover .play-btn {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+.play-btn-large {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 14px;
+}
+
+/* Playlist table */
+#playlist-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 720px;
+}
+
+#playlist-table tbody tr {
+    transition: background .18s, transform .12s;
+    cursor: pointer;
+}
+
+#playlist-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+    transform: translateY(-4px);
+}
+
+#playlist-table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    color: var(--text);
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+/* 시간 칸은 정적 스타일만 유지 */
+#playlist-table td.time {
+    text-align: right;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* Playlist row buttons */
+.playlist-row-play,
+.playlist-row-delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: transform .12s, box-shadow .12s, background .18s;
+}
+
+.playlist-row-play {
+    background: var(--accent);
+    color: #000;
+    border: var(--border-width) solid var(--border-accent);
+    min-width: 72px;
+}
+
+.playlist-row-delete {
+    background: #000;
+    color: var(--accent);
+    border: var(--border-width) solid var(--border-accent);
+    min-width: 72px;
+}
+
+/* Search area */
+.search-results,
+#page-search-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+#page-search .search-page-input,
+.page#page-search .search-page-input {
+    width: 50%;
+    max-width: 800px;
+    min-width: 320px;
+    margin: 20px auto 10px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+}
+
+.search-input {
+    background: rgba(255, 255, 255, 0.02);
+    border: var(--border-width) solid rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: all .18s;
+}
+
+.search-input:focus {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: var(--accent);
+    box-shadow: 0 0 12px rgba(245, 197, 66, 0.06);
+}
+
+.search-submit-btn,
+#page-search-btn {
+    background: var(--accent);
+    border: var(--border-width) solid var(--border-accent);
+    border-radius: 10px;
+    padding: 12px 20px;
+    color: #000;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Search card info */
+.search-result-info {
+    padding: 12px 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.search-result-info h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.search-result-info p {
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0;
+}
+
+/* Controls inside cards */
+.search-result-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 6px;
+}
+
+.search-result-preview {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 32px;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--accent);
+    border: var(--border-width) solid transparent;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.search-result-add {
+    background: transparent;
+    border: var(--border-width) solid var(--border-accent);
+    color: var(--accent);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.search-result-add.added,
+.search-result-add:disabled {
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--muted);
+    border-color: rgba(255, 255, 255, 0.04);
+    cursor: default;
+}
+
+/* Player bar */
+.player-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    max-width: 1000px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(0, 0, 0, 0.6));
+    border-top: var(--border-width) solid rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(6px);
+    border-radius: 30px;
+    z-index: 90;
+    box-sizing: border-box;
+    border: var(--border-width) solid var(--border-neutral);
+}
+
+.player-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 24px;
+    justify-content: space-between;
+}
+
+/* Now playing */
+.now-playing {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 180px;
+}
+
+.album-art {
+    width: 56px;
+    height: 56px;
+    border-radius: 6px;
+    overflow: hidden;
+    flex: 0 0 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: var(--border-width) solid var(--border-neutral);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.2));
+}
+
+.album-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+}
+
+.song-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+
+.song-details .song-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.song-details .song-artist {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Progress */
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1 1 auto;
+    min-width: 160px;
+}
+
+.time {
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 30px;
+}
+
+/* Progress bar: container is clickable; fill shows progress; thumb is the draggable handle */
+.progress-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+    position: relative;
+    border: var(--border-width) solid rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    display: block;
+    min-width: 80px;
+}
+
+/* fill */
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    border-radius: 999px;
+    width: 0%;
+    transition: width .08s linear;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* thumb (핸들) */
+.progress-thumb {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(245, 197, 66, 0.18);
+    border: 2px solid rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    transition: transform .08s ease;
+    z-index: 5;
+}
+
+/* thumb hover/focus */
+.progress-thumb:hover,
+.progress-thumb:focus {
+    transform: translate(-50%, -50%) scale(1.12);
+    outline: none;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6), 0 4px 10px rgba(245, 197, 66, 0.22);
+}
+
+/* Controls & volume */
+.player-bar .control-btn {
+    background: transparent;
+    color: var(--muted);
+    border: var(--border-width) solid transparent;
+    padding: 8px;
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.player-bar .play-btn-large {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #000;
+    border: var(--border-width) solid var(--border-accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 6px 18px rgba(245, 197, 66, 0.08);
+}
+
+.volume-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Volume slider: use CSS track fill via background gradient using --vol-percent */
+.volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 140px;
+    height: 12px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent) var(--vol-percent), rgba(255, 255, 255, 0.06) var(--vol-percent));
+    border-radius: 999px;
+    outline: none;
+    border: none;
+    position: relative;
+}
+
+/* thumb for volume slider (browser-specific) */
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+}
+
+/* For Firefox track styling */
+.volume-slider::-moz-range-track {
+    background: transparent;
+    height: 12px;
+    border-radius: 999px;
+}
+
+/* Top100 recommendation */
+.top100-wrap {
+    margin: 12px 0 28px;
+}
+
+.top100-title {
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+}
+
+.top100-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+.top100-card {
+    min-width: 160px;
+    width: 160px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 10px;
+    padding: 8px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border: var(--border-width) solid rgba(255, 255, 255, 0.03);
+}
+
+.top100-card img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex: 0 0 56px;
+}
+
+.top100-meta {
+    font-size: 12px;
+    overflow: hidden;
+}
+
+.top100-meta .t {
+    font-weight: 700;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.top100-meta .a {
+    color: var(--muted);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* Accessibility focus */
+.search-submit-btn,
+.play-btn,
+.play-btn-large,
+.control-btn,
+.follow-btn,
+.search-result-info button,
+.playlist-row-play,
+.playlist-row-delete {
+    outline-offset: 3px;
+}
+
+.search-submit-btn:focus,
+.play-btn:focus,
+.play-btn-large:focus,
+.control-btn:focus,
+.follow-btn:focus,
+.search-result-info button:focus,
+.playlist-row-play:focus,
+.playlist-row-delete:focus {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+}
+
+/* ---------------------------
+   Home layout: dual small cards and small-card rules
+   --------------------------- */
+
+.recommended-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.category-cards {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.category-card img {
+    height: 64px;
+}
+
+/* Home dual */
+.home-dual {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    margin-bottom: 28px;
+}
+
+.home-dual-section {
+    flex: 0 0 20%;
+    min-width: 180px;
+    max-width: 320px;
+}
+
+/* 작은 카드 그리드 */
+.small-grid {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: 1fr;
+}
+
+/* 카드 내부 요소 축소 */
+.playlist-card,
+.song-card,
+.search-result-card,
+.top100-card {
+    padding: 8px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(0, 0, 0, 0.45));
+    border: var(--border-width) solid rgba(255, 255, 255, 0.04);
+    transition: transform .18s, background .18s;
+}
+
+/* 이미지 래퍼 축소 */
+.playlist-image,
+.song-image,
+.search-result-image {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 84px;
+    border: var(--border-width) solid rgba(255, 255, 255, 0.03);
+}
+
+/* 카드 텍스트 축소 */
+.playlist-info h3,
+.song-card h3,
+.search-result-info h3,
+.top100-meta .t {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.playlist-info p,
+.song-card p,
+.search-result-info p,
+.top100-meta .a {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+/* 플레이 버튼 축소 */
+.play-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+    opacity: 0;
+}
+
+.playlist-card:hover .play-btn {
+    opacity: 1;
+    transform: scale(1.02);
+}
+
+/* 인기 아티스트 카드 테마 맞춤
+   -> 핵심 변경: 가로 정렬을 명확히 고정하고 내부 텍스트 컨테이너를 추가하여
+      아이콘(이미지)과 이름/카운트를 수평으로 배치합니다.
+*/
+.artist-card {
+    display: flex;
+    flex-direction: row;
+    /* 가로 정렬 강제 */
+    gap: 12px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: var(--border-width) solid var(--border-neutral);
+    padding: 8px 10px;
+    border-radius: 10px;
+    min-width: 180px;
+    box-sizing: border-box;
+}
+
+/* 내부 이미지 (아이콘) */
+.artist-card img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.04);
+    flex: 0 0 56px;
+}
+
+/* 텍스트 컨테이너: 이름과 곡 수를 세로로 쌓되 카드 내에서는 아이콘 옆에 위치 */
+.artist-card .artist-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    /* 텍스트 오버플로우를 위해 필요 */
+    overflow: hidden;
+}
+
+/* 아티스트 이름 (한 줄로 축약) */
+.artist-card .artist-name {
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text);
+    font-size: 14px;
+}
+
+/* 아티스트 곡 수 / 보조 텍스트 */
+.artist-card .artist-count {
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 포커스/호버 시 강조 (접근성 유지) */
+.artist-card:hover,
+.artist-card:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 48px rgba(245, 197, 66, 0.18);
+}
+
+/* 반응형 보정: 좁은 화면에서 과도한 테두리/그림자 완화 */
+@media (max-width:768px) {
+    .artist-card {
+        border-width: 2px;
+        box-shadow: 0 8px 20px rgba(245, 197, 66, 0.08);
+        gap: 10px;
+        padding: 8px;
+    }
+
+    .artist-card img {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+    }
+
+    .artist-card .artist-name {
+        font-size: 13px;
+    }
+
+    .artist-card .artist-count {
+        font-size: 11px;
+    }
+}
+
+/* 섹션 헤더 스타일 통일 */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-header h2 {
+    font-size: 16px;
+    font-weight: 800;
+    margin: 0 0 12px 0;
+    color: var(--text);
+}
+
+/* '모두 보기' 링크 스타일 */
+.section-header .see-all {
+    margin-left: auto;
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.section-header .see-all:hover {
+    text-decoration: underline;
+    color: var(--accent-2);
+}
+
+/* 반응형: 좁은 화면에서는 세로 스택으로 전환 */
+@media (max-width:1024px) {
+    .home-dual {
+        flex-direction: row;
+        gap: 12px;
+    }
+
+    .home-dual-section {
+        flex: 0 0 30%;
+        min-width: 160px;
+    }
+
+    .playlist-image,
+    .song-image {
+        height: 72px;
+    }
+}
+
+@media (max-width:768px) {
+    .home-dual {
+        flex-direction: column;
+    }
+
+    .home-dual-section {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .playlist-image,
+    .song-image {
+        height: 84px;
+    }
+}
+
+/* 포커스/접근성 강조 유지 */
+.playlist-card:focus,
+.song-card:focus,
+.search-result-card:focus,
+.top100-card:focus {
+    outline: 3px solid rgba(245, 197, 66, 0.12);
+    outline-offset: 3px;
+}
+
+/* 홈 섹션 간격 축소 */
+#page-home .section {
+    margin-bottom: 28px;
+}
+
+/* Hero (지금 재생중 / 추천 제목) 스타일 정리 */
+.hero-section {
+    margin-bottom: 20px;
+    padding: 12px 0;
+}
+
+.hero-section .hero-content {
+    align-items: center;
+    gap: 12px;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* 제목 / 서브타이틀 스타일 */
+.hero-section .hero-content h1 {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    margin: 0;
+}
+
+.hero-section .hero-content p {
+    font-size: 8px;
+    color: var(--muted);
+    margin: 0;
+}
+
+/* hero 내부 박스 강조 (우선순위 높음) */
+.hero-section .hero-content,
+#home-now-playing,
+#home-recommended {
+    border: 2px solid var(--accent) !important;
+    border-radius: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(0, 0, 0, 0.45));
+    box-shadow: 0 8px 24px rgba(245, 197, 66, 0.06);
+}
+
+/* 작은 화면에서 제목 줄바꿈 안정화 */
+@media (max-width:768px) {
+    .hero-section .hero-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+/* home-now-playing / home-recommended 강조 보완 */
+.home-now-playing,
+.home-recommended {
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--accent);
+    background-clip: padding-box;
+}
+
+/* 포커스/호버 강조 */
+.hero-section .hero-content:hover,
+#home-now-playing:hover,
+#home-recommended:hover,
+#home-now-playing:focus-within,
+#home-recommended:focus-within {
+    box-shadow: 0 12px 36px rgba(245, 197, 66, 0.12);
+    transform: translateY(-3px);
+    transition: transform .12s, box-shadow .18s;
+}
+
+/* hero 내부 버튼/링크 액센트 색 적용 */
+.hero-section .hero-content a,
+.hero-section .hero-content button {
+    color: var(--accent);
+    border-color: rgba(245, 197, 66, 0.12);
+}
+
+/* Stack: 추천을 지금 재생중 아래로 배치 */
+.home-row {
+    flex-direction: column !important;
+    gap: 16px !important;
+}
+
+/* 박스 내부 여백/정렬 보정 */
+#home-now-playing,
+#home-recommended {
+    padding: 18px 20px !important;
+}
+
+/* 박스 내부 텍스트 크기 증가 (우선순위) */
+.hero-section .hero-content h1 {
+    font-size: 30px !important;
+}
+
+.hero-section .hero-content p {
+    font-size: 20px !important;
+}
+
+/* 지금 재생중 내부 텍스트 */
+#home-now-playing .now-playing-inner div[style*="font-weight:700"],
+#home-now-playing .song-title,
+#home-now-playing h4,
+#home-now-playing .now-playing-inner .song-title {
+    font-size: 21px !important;
+    font-weight: 800 !important;
+}
+
+#home-now-playing .now-playing-inner div[style*="color:var(--muted)"],
+#home-now-playing .song-artist,
+#home-now-playing p {
+    font-size: 18px !important;
+    color: var(--muted) !important;
+}
+
+/* 추천 그리드 내부 텍스트 확대 */
+#home-recommended .home-title {
+    font-size: 24px !important;
+    font-weight: 900 !important;
+}
+
+#home-recommended .recommended-grid .search-result-info h3,
+#home-recommended .recommended-grid h3,
+#home-recommended .recommended-grid .playlist-info h3 {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+}
+
+#home-recommended .recommended-grid .search-result-info p,
+#home-recommended .recommended-grid p,
+#home-recommended .recommended-grid .playlist-info p {
+    font-size: 16px !important;
+    color: var(--muted) !important;
+}
+
+/* 카드 내부 버튼/아이콘 크기 보정 */
+#home-recommended .search-result-preview,
+#home-recommended .search-result-add,
+#home-now-playing .play-btn {
+    transform-origin: center;
+}
+
+/* 반응형: 모바일에서 가독성 유지 */
+@media (max-width:768px) {
+    .home-row {
+        gap: 12px !important;
+    }
+
+    .hero-section .hero-content h1 {
+        font-size: 24px !important;
+    }
+
+    .hero-section .hero-content p {
+        font-size: 16px !important;
+    }
+
+    #home-now-playing .now-playing-inner div[style*="font-weight:700"],
+    #home-now-playing .song-title {
+        font-size: 18px !important;
+    }
+
+    #home-now-playing .now-playing-inner div[style*="color:var(--muted)"],
+    #home-now-playing .song-artist {
+        font-size: 16px !important;
+    }
+
+    #home-recommended .home-title {
+        font-size: 20px !important;
+    }
+
+    #home-recommended .recommended-grid .search-result-info h3 {
+        font-size: 16px !important;
+    }
+
+    #home-recommended .recommended-grid .search-result-info p {
+        font-size: 14px !important;
+    }
+}
+
+/* 시각적 안정성: 최소 높이 보장 */
+#home-now-playing {
+    min-height: 120px;
+}
+
+#home-recommended {
+    min-height: 140px;
+}
+
+/* 추천 섹션 글자 크기 조정(원본에 따른 추가 규칙) */
+.home-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+}
+
+#home-now-playing {
+    order: 1;
+}
+
+#home-recommended {
+    order: 2;
+}
+
+/* 추천 섹션 내부 글자 크기 절반 축소 규칙 (원본에 포함된 규칙 보존) */
+#home-recommended .home-title {
+    font-size: 12px !important;
+    font-weight: 800 !important;
+}
+
+#home-recommended .recommended-grid .search-result-info h3,
+#home-recommended .recommended-grid h3,
+#home-recommended .recommended-grid .playlist-info h3 {
+    font-size: 9px !important;
+    font-weight: 700 !important;
+}
+
+#home-recommended .recommended-grid .search-result-info p,
+#home-recommended .recommended-grid p,
+#home-recommended .recommended-grid .playlist-info p {
+    font-size: 8px !important;
+    color: var(--muted) !important;
+}
+
+/* 추천 카드 내부 이미지 보정 */
+#home-recommended .search-result-image img,
+#home-recommended .playlist-image img {
+    object-fit: cover;
+}
+
+/* 반응형 보정: 모바일에서 최소값 적용 */
+@media (max-width:768px) {
+    #home-recommended .home-title {
+        font-size: 14px !important;
+    }
+
+    #home-recommended .recommended-grid .search-result-info h3 {
+        font-size: 12px !important;
+    }
+
+    #home-recommended .recommended-grid .search-result-info p {
+        font-size: 11px !important;
+    }
+}
+
+/* 사용자 요청: 오늘의 추천곡 / 새로운 음악 박스 노란 테두리 추가 */
+.home-dual-section {
+    border: 0.5px solid var(--accent);
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 8px 20px rgba(245, 197, 66, 0.06);
+    background: inherit;
+}
+
+/* 내부 카드와 충돌하지 않도록 테두리만 적용 */
+.home-dual-section .playlist-card,
+.home-dual-section .song-card {
+    border: none;
+    background: transparent;
+}
+
+/* 인기 아티스트 테두리 가시성 강화 (이미 위에서 .artist-card 정의) */
+.artist-card {
+    /* 이미 정의된 규칙이 우선 적용됩니다 */
+}
+
+/* Responsive adjustments for sidebar and page padding */
+@media (max-width:1024px) {
+    :root {
+        --sidebar-width: 200px;
+        --page-padding: 30px;
+    }
+
+    #page-search .search-page-input {
+        width: 60%;
+        min-width: 280px;
+    }
+
+    .search-results,
+    #page-search-results {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+}
+
+@media (max-width:768px) {
+    :root {
+        --sidebar-width: 200px;
+        --page-padding: 20px;
+    }
+
+    .main-content {
+        padding: 0 20px;
+    }
+
+    #page-search .search-page-input {
+        width: 90%;
+        min-width: 0;
+    }
+
+    .player-controls,
+    .progress-container,
+    .volume-container {
+        display: none;
+    }
+}
+
+@media (max-width:480px) {
+    :root {
+        --sidebar-width: 180px;
+        --page-padding: 12px;
+    }
+
+    .main-content {
+        padding: 0 12px;
+    }
+
+    #page-search .search-page-input {
+        width: 95%;
+        min-width: 0;
+    }
+
+    .playlist-row-play,
+    .playlist-row-delete {
+        height: 32px;
+        padding: 0 10px;
+        font-size: 13px;
+    }
+
+    .top100-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 12px;
+    }
+}
+
+/* ===== Top100: 검색 결과 카드와 동일한 크기/레이아웃으로 맞춤 ===== */
+.top100-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+.top100-card {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform .18s, background .18s;
+    cursor: pointer;
+    border: var(--border-width) solid var(--border-neutral);
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.top100-card .search-result-image,
+.top100-card .playlist-image,
+.top100-card .song-image {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: var(--border-width) solid rgba(255, 255, 255, 0.03);
+}
+
+.top100-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.top100-card .top100-meta {
+    padding: 12px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: none;
+    min-height: 64px;
+}
+
+.top100-card .top100-meta .t {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.top100-card .top100-meta .a {
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.top100-card:hover {
+    transform: translateY(-6px);
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+.top100-card .search-result-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 6px;
+}
+
+/* 반응형: 검색 결과와 동일한 브레이크포인트 동작 유지 */
+@media (max-width:1024px) {
+    .top100-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 16px;
+    }
+}
+
+/* End of styles.css */

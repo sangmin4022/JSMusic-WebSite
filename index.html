@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSMusic - 음악 스트리밍 서비스</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        /* 간단한 페이지 전환용 스타일 (styles.css에 추가해도 됩니다) */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 왼쪽 사이드바 메뉴 -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span class="logo-icon">♪</span>
+            <span class="logo-text">JSMusic</span>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="#" class="sidebar-link" id="search-nav-link" data-page="page-search">
+                <span class="icon">🔍</span>
+                <span class="text">검색</span>
+            </a>
+            <a href="#" class="sidebar-link active" id="home-nav-link" data-page="page-home">
+                <span class="icon">🏠</span>
+                <span class="text">홈</span>
+            </a>
+            <a href="#" class="sidebar-link" id="playlist-nav-link" data-page="page-playlists">
+                <span class="icon">📋</span>
+                <span class="text">재생목록</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="main-content">
+        <!-- HOME -->
+        <div id="page-home" class="page active">
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1>지금 재생 중</h1>
+                    <p>당신이 좋아할 곡들</p>
+                </div>
+            </section>
+
+            <!-- 두 개의 추천 섹션을 가로로 배치 (축소된 카드) -->
+            <section class="section">
+                <div class="home-dual">
+                    <!-- 오늘의 추천 곡 (이전: 오늘의 하이라이트) -->
+                    <div class="home-dual-section">
+                        <div class="section-header">
+                            <h2>오늘의 추천 곡</h2>
+                        </div>
+                        <div class="playlist-grid small-grid">
+                            <div class="playlist-card">
+                                <div class="playlist-image"
+                                    style="background: linear-gradient(135deg, #3bdb40 0%, #f5f107 100%);">
+                                    <button class="play-btn">▶</button>
+                                </div>
+                                <div class="playlist-info">
+                                    <h3>추천 플레이리스트</h3>
+                                    <p>큐레이션 기반 추천</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 새로운 음악 (이전: 에너제틱) -->
+                    <div class="home-dual-section">
+                        <div class="section-header">
+                            <h2>새로운 음악</h2>
+                        </div>
+                        <div class="songs-grid small-grid">
+                            <div class="song-card">
+                                <div class="song-image"
+                                    style="background: linear-gradient(135deg, #860fb6 0%, #4a69bd 100%);">
+                                    <button class="play-btn">▶</button>
+                                </div>
+                                <h3>신곡</h3>
+                                <p>누구보다 빠르게!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-header">
+                    <h2>인기 아티스트</h2>
+                    <a href="#" id="popular-artists-see-all" class="see-all"
+                        style="margin-left:auto; color:var(--accent); font-weight:700; text-decoration:none;">모두 보기</a>
+                </div>
+
+                <div class="artist-grid">
+                    <div class="artist-card">
+                        <img src="janeLee2.jpg" alt="이재인" />
+                        <div style="min-width:0;">
+                            <div style="font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                이재인</div>
+                            <div style="color:var(--muted); font-size:12px;">420.4k 팔로워</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- SEARCH -->
+        <div id="page-search" class="page" aria-hidden="true">
+            <section class="section">
+                <div class="search-page-input" style="margin:20px 0 30px; display:flex; gap:10px; align-items:center;">
+                    <input id="page-search-input" class="search-input" type="text" placeholder="아티스트, 곡명, 앨범을 검색하세요..."
+                        style="flex:1; padding:12px 16px; border-radius:10px; border:1px solid #f5c542; background: rgba(255,255,255,0.06); color:#fff;">
+                    <button id="page-search-btn" class="search-submit-btn"
+                        style="padding:12px 20px; border-radius:10px; border:none; background:#f5c542; color:#000; font-weight:600;">검색</button>
+                </div>
+                <!-- 검색 입력 바로 아래에 추가 -->
+                <div id="top100-recommendations" class="top100-wrap" aria-live="polite"></div>
+
+
+                <div id="page-search-results" class="search-results"></div>
+            </section>
+        </div>
+
+        <!-- PLAYLISTS -->
+        <div id="page-playlists" class="page" aria-hidden="true">
+            <section class="section playlist-page">
+                <div class="playlist-header" style="display:flex; gap:20px; align-items:center; margin-bottom:24px;">
+                    <div class="playlist-cover"
+                        style="width:140px; height:140px; border-radius:12px; overflow:hidden; border:var(--border-width) solid var(--border-neutral);">
+                        <img id="playlist-cover-img" src="janeLee.webp" alt="플레이리스트 커버"
+                            style="width:100%; height:100%; object-fit:cover; display:block;">
+                    </div>
+
+                    <div class="playlist-meta" style="flex:1; min-width:0;">
+                        <h1 class="playlist-title" style="font-size:28px; margin:0 0 6px 0; color:var(--text);">노래★</h1>
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <button id="playlist-play-all" class="search-submit-btn"
+                                style="padding:10px 18px; border-radius:10px;">재생</button>
+                            <button id="playlist-shuffle" class="search-submit-btn"
+                                style="padding:10px 14px; border-radius:10px; background:transparent; border:var(--border-width) solid var(--border-accent); color:var(--accent);">셔플</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="playlist-table-wrap"
+                    style="overflow:auto; border:var(--border-width) solid rgba(255,255,255,0.03); border-radius:12px; padding:12px;">
+                    <table id="playlist-table" style="width:100%; border-collapse:collapse; min-width:720px;">
+                        <thead>
+                            <tr
+                                style="text-align:left; color:var(--muted); font-size:13px; border-bottom:1px solid rgba(255,255,255,0.03);">
+                                <th style="padding:12px 8px;">#</th>
+                                <th style="padding:12px 8px;">노래</th>
+                                <th style="padding:12px 8px;">아티스트</th>
+                                <th style="padding:12px 8px;">앨범</th>
+                                <th style="padding:12px 8px; text-align:right;">시간</th>
+                                <th style="padding:12px 8px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="playlist-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 숨겨진 오디오 플레이어 -->
+    <audio id="audio-player"></audio>
+
+    <!-- 플레이어 바 -->
+    <footer class="player-bar">
+        <div class="player-content">
+            <div class="now-playing">
+                <div class="album-art" aria-hidden="true"></div>
+                <div class="song-details">
+                    <h4 class="song-title">곡 제목</h4>
+                    <p class="song-artist">아티스트</p>
+                </div>
+            </div>
+
+            <div class="player-controls">
+
+                <button class="control-btn play-btn-large">▶</button>
+
+            </div>
+
+            <div class="progress-container player-bar-times">
+                <span class="time player-time-current">0:00</span>
+                <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-fill"></div>
+                </div>
+                <span class="time player-time-total">-:-</span>
+            </div>
+
+            <div class="volume-container">
+                <button class="control-btn">🔊</button>
+                <input type="range" min="0" max="100" value="70" class="volume-slider">
+            </div>
+        </div>
+    </footer>
+
+    <!-- 외부 스크립트 (자바스크립트는 별도 파일로 유지) -->
+    <script src="script.js"></script>
+
+    <!-- 커스텀 알림/확인 모달 (DOM에 남겨둠, 스크립트에서 제어) -->
+    <div id="ui-modal-backdrop" class="ui-modal-backdrop" aria-hidden="true" role="dialog" aria-modal="true"
+        style="display:none;">
+        <div class="ui-modal" role="document" aria-labelledby="ui-modal-title" aria-describedby="ui-modal-desc">
+            <div class="ui-modal-header">
+                <h3 id="ui-modal-title">알림</h3>
+            </div>
+            <div id="ui-modal-desc" class="ui-modal-body">
+                <p class="ui-modal-message">메시지</p>
+            </div>
+            <div class="ui-modal-actions">
+                <button id="ui-modal-cancel" class="ui-modal-btn ui-modal-btn-secondary">취소</button>
+                <button id="ui-modal-confirm" class="ui-modal-btn ui-modal-btn-primary">확인</button>
+            </div>
+            <button class="ui-modal-close" aria-label="닫기">✕</button>
+        </div>
+    </div>
+</body>
+
+</html>
