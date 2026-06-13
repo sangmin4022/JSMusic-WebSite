@@ -1901,3 +1901,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 })();
+
+document.addEventListener("DOMContentLoaded", () => {
+    const hamburgerBtn = document.querySelector(".hamburger-btn");
+    const sidebar = document.querySelector(".sidebar");
+    if (hamburgerBtn && sidebar) {
+        hamburgerBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+        });
+        // 메뉴 클릭 시 자동 닫힘
+        sidebar.querySelectorAll(".sidebar-link").forEach(link => {
+            link.addEventListener("click", () => {
+                sidebar.classList.remove("open");
+            });
+        });
+    }
+});
