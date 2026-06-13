@@ -1360,4 +1360,509 @@ body {
     }
 }
 
-/* End of styles.css */
+/* 햄버거 버튼 기본 숨김 */
+.hamburger-btn {
+    display: none;
+}
+
+/* 모바일 대응 */
+@media (max-width:768px) {
+
+    /* 햄버거 버튼 표시 */
+    .hamburger-btn {
+        display: block;
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        font-size: 28px;
+        background: #000;
+        /* 투명하지 않게 */
+        border: 2px solid var(--accent);
+        border-radius: 6px;
+        color: var(--accent);
+        z-index: 300;
+        /* 메인 요소보다 위 */
+        padding: 6px 10px;
+        cursor: pointer;
+    }
+
+    /* 사이드바: 기본 숨김 */
+    .sidebar {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        width: 220px;
+        height: 100vh;
+        transition: left 0.3s ease;
+        background: #111;
+        /* 투명하지 않게 */
+        z-index: 250;
+    }
+
+    /* 햄버거 클릭 시 표시 */
+    .sidebar.open {
+        left: 0;
+    }
+
+    /* 메인 컨텐츠: 사이드바 공간 제거 */
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 60px 16px 80px;
+        /* 햄버거 버튼과 겹치지 않게 위쪽 여백 */
+    }
+}
+
+@media (max-width:768px) {
+
+    /* 재생바: 화면의 80%만 차지, 중앙 정렬 */
+    .player-bar {
+        width: 90%;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 0;
+        border-radius: 20px;
+        max-width: 100%;
+    }
+
+    /* 메인 컨텐츠 */
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 60px 16px 80px;
+    }
+
+    /* 기존에 숨겨버린 컨트롤 영역 다시 표시 */
+    .player-controls {
+        display: flex !important;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* 일시정지 버튼 */
+    .player-bar .play-btn-large {
+        display: inline-flex !important;
+        width: 48px;
+        height: 48px;
+        font-size: 18px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* 건너뛰기 버튼 (skip/next) */
+    .player-bar .control-btn.skip,
+    .player-bar .control-btn.next {
+        display: inline-flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+}
+
+@media (max-width:768px) {
+
+    /* 검색 결과 카드: 한 줄에 3개 */
+    .search-results,
+    #page-search-results {
+        grid-template-columns: repeat(3, 1fr);
+        /* 한 줄에 3개 */
+        gap: 8px;
+    }
+
+    .search-result-card {
+        transform: scale(0.95);
+        /* 기본 크기 살짝 축소 */
+        transform-origin: center;
+        transition: transform 0.18s ease;
+    }
+
+    .search-result-card:hover {
+        transform: scale(1.0);
+        /* hover 시 살짝 확대 */
+    }
+
+    /* Top100 카드도 모바일에서 한 줄에 3개 */
+    .top100-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .top100-card {
+        transform: scale(0.95);
+        transform-origin: center;
+        transition: transform 0.18s ease;
+    }
+
+    .top100-card:hover {
+        transform: scale(1.0);
+    }
+
+    /* 검색 결과 카드 내부 컨트롤 영역 세로 배치 */
+    .search-result-controls {
+        flex-direction: column;
+        /* 가로 → 세로 */
+        align-items: stretch;
+        /* 버튼 너비 맞춤 */
+        gap: 6px;
+        /* 버튼 간격 */
+    }
+
+    /* 재생목록 추가 버튼 */
+    .search-result-add {
+        font-size: 11px;
+        /* 글씨 크기 줄임 */
+        padding: 4px 8px;
+        /* 패딩 줄임 */
+        border-radius: 6px;
+        width: 100%;
+        /* 카드 너비에 맞춤 */
+        text-align: center;
+        white-space: nowrap;
+        /* 글씨 한 줄로 표시 */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        /* 길면 ... 처리 */
+    }
+
+    /* 미리보기/재생 버튼 */
+    .search-result-preview {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 6px;
+        width: 100%;
+        /* 카드 너비에 맞춤 */
+        text-align: center;
+    }
+}
+
+@media (max-width:768px) {
+
+    /* 홈 화면 추천 카드 두 개를 가로 배치 */
+    .home-dual {
+        display: flex;
+        flex-direction: row;
+        /* 세로 → 가로 */
+        gap: 12px;
+        /* 카드 간격 */
+        justify-content: space-between;
+    }
+
+    /* 각 카드가 화면 반씩 차지 */
+    .home-dual-section .playlist-card,
+    .home-dual-section .song-card {
+        flex: 1;
+        /* 동일한 너비 */
+        min-width: 0;
+        /* 글씨 잘리지 않게 */
+    }
+}
+
+@media (max-width:768px) {
+
+    /* ------------------------------
+     앨범 컬럼 숨기기 (헤더 + tbody 4번째 컬럼)
+     ------------------------------ */
+    #playlist-table thead th:nth-child(4),
+    #playlist-tbody tr td:nth-child(4),
+    #playlist-table thead th[aria-label*="앨범"],
+    #playlist-tbody td[aria-label*="앨범"] {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* 추가 안전장치: 클래스/속성에 album 또는 앨범 포함된 요소 숨김 */
+    #playlist-tbody [class*="album"],
+    #playlist-tbody [id*="album"],
+    #playlist-tbody [class*="앨범"],
+    #playlist-tbody [id*="앨범"] {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* ------------------------------
+     헤더: 바디 레이아웃과 동일한 비율로 맞춤
+     ------------------------------ */
+    #playlist-table thead tr,
+    #playlist-table thead tr th {
+        display: flex !important;
+        align-items: center !important;
+        box-sizing: border-box !important;
+        padding-top: 6px !important;
+        padding-bottom: 6px !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        margin: 0 !important;
+        white-space: nowrap !important;
+    }
+
+    /* 헤더 칼럼 너비 비율 (번호 / 제목 / 아티스트 / 시간 / 액션) */
+    #playlist-table thead tr th:nth-child(1) {
+        flex: 0 0 36px !important;
+        max-width: 36px !important;
+        min-width: 36px !important;
+        text-align: right !important;
+        padding-right: 8px !important;
+    }
+
+    #playlist-table thead tr th:nth-child(2) {
+        flex: 1 1 40% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        text-align: left !important;
+        white-space: normal !important;
+        overflow: visible !important;
+    }
+
+    #playlist-table thead tr th:nth-child(3) {
+        flex: 1 1 30% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        text-align: left !important;
+        white-space: normal !important;
+        overflow: visible !important;
+    }
+
+    #playlist-table thead tr th:nth-child(5) {
+        flex: 0 0 48px !important;
+        min-width: 40px !important;
+        max-width: 56px !important;
+        text-align: center !important;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+        white-space: nowrap !important;
+    }
+
+    #playlist-table thead tr th:last-child,
+    #playlist-table thead tr th.actions {
+        flex: 0 0 auto !important;
+        min-width: 80px !important;
+        max-width: 160px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        padding-left: 6px !important;
+        padding-right: 8px !important;
+    }
+
+    #playlist-table thead tr th,
+    #playlist-table thead tr th * {
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        line-height: 1.15 !important;
+        font-size: 13px !important;
+        margin: 0 !important;
+    }
+
+    /* ------------------------------
+     테이블/바디/행: 화면 너비에 딱 맞게 맞춤
+     ------------------------------ */
+    #playlist-table {
+        width: 100% !important;
+        table-layout: auto !important;
+        border-collapse: collapse !important;
+        box-sizing: border-box !important;
+    }
+
+    #playlist-tbody {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 각 행을 flex 컨테이너로 전환 */
+    #playlist-tbody tr {
+        display: flex !important;
+        width: 100% !important;
+        align-items: center !important;
+        gap: 8px !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* 모든 셀 기본 스타일 (작은 패딩 유지) */
+    #playlist-tbody td {
+        display: block !important;
+        box-sizing: border-box !important;
+        padding-top: 6px !important;
+        padding-bottom: 6px !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        margin: 0 !important;
+        vertical-align: middle !important;
+        overflow: visible !important;
+    }
+
+    /* 1: 번호(고정폭) */
+    #playlist-tbody td:nth-child(1) {
+        flex: 0 0 36px !important;
+        max-width: 36px !important;
+        min-width: 36px !important;
+        text-align: right !important;
+        padding-right: 8px !important;
+    }
+
+    /* 2: 제목 (가변폭, 우선 공간 차지) */
+    #playlist-tbody td:nth-child(2) {
+        flex: 1 1 40% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+    }
+
+    /* 3: 아티스트 (가변폭) */
+    #playlist-tbody td:nth-child(3) {
+        flex: 1 1 30% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        color: inherit !important;
+        font-size: 13px !important;
+    }
+
+    /* 5: 시간(고정폭) */
+    #playlist-tbody td:nth-child(5) {
+        flex: 0 0 48px !important;
+        min-width: 40px !important;
+        max-width: 56px !important;
+        text-align: center !important;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+        white-space: nowrap !important;
+        overflow: visible !important;
+    }
+
+    /* 마지막 칸(액션/버튼): 고정 최소폭, 오른쪽 정렬 */
+    #playlist-tbody td:last-child,
+    #playlist-tbody td.actions {
+        flex: 0 0 auto !important;
+        min-width: 80px !important;
+        max-width: 160px !important;
+        display: flex !important;
+        gap: 6px !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        padding-left: 6px !important;
+        padding-right: 8px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* ------------------------------
+     노래라인 내부 수평 간격 축소(마진/패딩 최소화)
+     ------------------------------ */
+    /* 모든 내부 요소 마진 제거(안정성) */
+    #playlist-tbody td,
+    #playlist-tbody td * {
+        margin: 0 !important;
+        line-height: 1.15 !important;
+        font-size: 13px !important;
+    }
+
+    /* 제목/아티스트: 줄바꿈 허용, ellipsis 제거하여 생략 방지 */
+    #playlist-tbody td:nth-child(2) *,
+    #playlist-tbody td:nth-child(3) * {
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        word-break: break-word !important;
+        hyphens: auto !important;
+        display: block !important;
+    }
+
+    /* 시간 셀 내부 여백 축소 */
+    #playlist-tbody td:nth-child(5) * {
+        margin-left: 2px !important;
+        margin-right: 2px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    /* 버튼 칸 내부 간격 더 좁게 (gap만 줄여서 다른 규칙 영향 최소화) */
+    #playlist-tbody tr td:last-child,
+    #playlist-tbody tr td.actions {
+        gap: 2px !important;
+        padding-left: 4px !important;
+        padding-right: 4px !important;
+    }
+
+    /* 재생 버튼 레이블의 좌우 여백 최소화 */
+    #playlist-tbody .playlist-row-play .btn-icon {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    #playlist-tbody .playlist-row-play .btn-label {
+        display: inline-block !important;
+        visibility: visible !important;
+        font-size: 13px !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+        padding: 2px 6px !important;
+        white-space: nowrap !important;
+    }
+
+    /* 삭제 버튼을 무조건 보이게 */
+    #playlist-tbody .playlist-row-delete,
+    #playlist-tbody .playlist-row-delete[style] {
+        display: inline-flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 2px 6px !important;
+        margin: 0 !important;
+        width: auto !important;
+        height: auto !important;
+        min-width: 0 !important;
+        font-size: 13px !important;
+        line-height: 1 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+    }
+
+    /* spacer 숨김 */
+    #playlist-tbody tr td:last-child>span,
+    #playlist-tbody tr td.actions>span {
+        display: none !important;
+        width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* 의사요소/장식 제거 */
+    #playlist-tbody .playlist-row-play::before,
+    #playlist-tbody .playlist-row-play::after,
+    #playlist-tbody .playlist-row-delete::before,
+    #playlist-tbody .playlist-row-delete::after {
+        display: none !important;
+        content: none !important;
+    }
+
+    /* 인라인 style로 display:none 등 강제된 경우에도 보이게 덮어쓰기 */
+    #playlist-tbody [style*="display:none"],
+    #playlist-tbody [style*="visibility:hidden"] {
+        display: revert !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    /* 안전장치: 모든 텍스트 잘림 규칙 덮어쓰기 */
+    #playlist-tbody * {
+        text-overflow: clip !important;
+        overflow-wrap: break-word !important;
+    }
+}
